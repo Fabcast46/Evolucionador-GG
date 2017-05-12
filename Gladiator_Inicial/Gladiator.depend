@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1494527765 source:/home/luis/Desktop/Gladiator/main.cpp
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro_native_dialog.h>
+	<iostream>
+
