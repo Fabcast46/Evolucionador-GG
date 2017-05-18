@@ -1,0 +1,70 @@
+# depslib dependency file v1.0
+1495134618 source:/home/luis/Desktop/Gladiator/main.cpp
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro_native_dialog.h>
+	"curl/curl.h"
+	"Gladiator.h"
+	"xCliente.h"
+	<iostream>
+	<string>
+	<sstream>
+	<string.h>
+	<cmath>
+	<list>
+	<vector>
+	<algorithm>
+	<random>
+	<ctime>
+
+1494528130 source:/home/luis/Desktop/Gladiator/Gladiator.cpp
+	"Gladiator.h"
+
+1494981561 /home/luis/Desktop/Gladiator/Gladiator.h
+
+1494974262 source:/home/luis/Desktop/Gladiator/xCliente.cpp
+	"xCliente.h"
+
+1494968995 /home/luis/Desktop/Gladiator/xCliente.h
+	<iostream>
+	<cstring>
+	<sys/socket.h>
+	<netdb.h>
+
+1476101548 /home/luis/Desktop/Gladiator/curl/curl.h
+	"curlver.h"
+	"curlbuild.h"
+	"curlrules.h"
+	<stdio.h>
+	<limits.h>
+	<osreldate.h>
+	<sys/types.h>
+	<time.h>
+	<winsock2.h>
+	<ws2tcpip.h>
+	<sys/select.h>
+	<sys/socket.h>
+	<sys/time.h>
+	<support/SupportDefs.h>
+	"easy.h"
+	"multi.h"
+	"typecheck-gcc.h"
+
+1478069708 /home/luis/Desktop/Gladiator/curl/curlver.h
+
+1478069708 /home/luis/Desktop/Gladiator/curl/curlbuild.h
+	<sys/types.h>
+	<sys/socket.h>
+
+1476101548 /home/luis/Desktop/Gladiator/curl/curlrules.h
+
+1476101548 /home/luis/Desktop/Gladiator/curl/easy.h
+
+1476101548 /home/luis/Desktop/Gladiator/curl/multi.h
+	"curl.h"
+
+1476101548 /home/luis/Desktop/Gladiator/curl/typecheck-gcc.h
+

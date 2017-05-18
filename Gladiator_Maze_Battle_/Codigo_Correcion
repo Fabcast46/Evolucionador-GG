@@ -1,0 +1,296 @@
+//Se incluyen bibliotecas
+
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_native_dialog.h>
+#include <iostream>
+
+//Se crean espacios
+
+ALLEGRO_DISPLAY *display = NULL;
+ALLEGRO_BITMAP *image   = NULL;
+//ALLEGRO_BITMAP *naveJugador = NULL;
+//ALLEGRO_BITMAP *naveEnemiga = NULL;
+//ALLEGRO_BITMAP *naveEnemiga1 = NULL;
+//ALLEGRO_BITMAP *naveEnemiga2 = NULL;
+//ALLEGRO_BITMAP *bala = NULL;
+//ALLEGRO_BITMAP *explosion = NULL;
+ALLEGRO_EVENT_QUEUE *event_queue = NULL;
+ALLEGRO_TIMER *timer;
+
+/*bool colision(int x1, int y1, int ancho1, int alto1, int x2, int y2, int ancho2, int alto2){
+    return((x1 < x2 + ancho2) && (x2 < x1 + ancho1) && (y1 < y2 + alto2) && (y2 < y1 + alto1));  //Revisa si hay colisiones entre 2 imagenes
+}
+
+void explosionColision(int x, int y){
+    explosion = al_load_bitmap("explosion6.png"); //Corre cada vez que hay colision y reproduce la imagen de explocion
+    al_draw_bitmap(explosion, x, y, 0);
+}*/
+
+//Se inician variables para el juego
+
+const int Ancho = 1136;
+const int Alto = 640;
+//const int NaveSize = 50;
+//float nave_x = Ancho / 2.0 - NaveSize / 2.0;
+//float nave_y = Alto / 2.0 - NaveSize / 2.0;
+enum MYKEYS {KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_SPACE};
+bool key[5] = { false, false, false, false,false};
+bool doexit = false;
+bool redraw = true;
+//const int maxdisparos = 30;
+//int ejex = 100;
+//int ejey = 20;
+//int ejex1 = 300;
+//int ejey1 = 300;
+//int ejex2 = 500;
+//int ejey2 = 20;
+
+//Se crea una estructura para la nave jugador
+
+/*struct Nave{
+    int x,y;
+    int dir;
+    int numdisparos;
+} nav = {nave_x,nave_y,1,0};*/
+
+//Se crea una estructura para las balas del jugador
+
+/*struct Balas{
+    int x,y;
+    int dx,dy;
+} disparos[maxdisparos];*/
+
+int main(int argc, char **argv){
+
+   if(!al_init()) {
+      al_show_native_message_box(display, "Error", "Error", "Failed to initialize allegro!", //Inicia allegro
+                                 NULL, ALLEGRO_MESSAGEBOX_ERROR);
+      return 0;
+   }
+
+   if(!al_init_image_addon()) {
+      al_show_native_message_box(display, "Error", "Error", "Failed to initialize al_init_image_addon!", //Se lanza una pantalla con mensaje de error
+                                 NULL, ALLEGRO_MESSAGEBOX_ERROR);
+      return 0;
+   }
+
+   display = al_create_display(Ancho,Alto); //Se crea el display con las dimensiones ya establecidas
+
+   if(!display) {
+      al_show_native_message_box(display, "Error", "Error", "Failed to initialize display!", //Lanza mensaje de error si el display no se crea correctamente
+                                 NULL, ALLEGRO_MESSAGEBOX_ERROR);
+      return 0;
+   }
+
+    //Se cargan las imagenes para el juego
+
+    image = al_load_bitmap("fondo_coliseo.png");
+    //naveJugador = al_load_bitmap("Personaje (copy).png");
+    /*naveEnemiga = al_load_bitmap("boss3En.png");
+    naveEnemiga1 = al_load_bitmap("boss2En.png");
+    naveEnemiga2 = al_load_bitmap("boss1En.png");
+    bala = al_load_bitmap("Bala (copy).png");*/
+
+   if(!image) {
+      al_show_native_message_box(display, "Error", "Error", "Failed to load image!", //Error si no se carga el fondo
+                                 NULL, ALLEGRO_MESSAGEBOX_ERROR);
+      al_destroy_display(display);
+      return 0;
+   }
+
+   //Se inicializan las bibliotecas de allegro
+
+    al_install_keyboard();
+    al_init_image_addon();
+    al_init_font_addon();
+    al_init_ttf_addon();
+    al_init_primitives_addon();
+    al_install_mouse();
+
+    //Se crea el evento y el timer para poder obtener las teclas y llevar tiempo de ejecucion
+
+    event_queue = al_create_event_queue();
+    timer = al_create_timer(1.0/60);
+    al_register_event_source(event_queue,al_get_timer_event_source(timer));
+    al_register_event_source(event_queue,al_get_keyboard_event_source());
+    al_start_timer(timer); //Se inicia el timer
+    bool render = false;
+    //int fondoY = 0;
+    //Estas variables estan hechas para poder llevar un tiempo moderado en el disparo de las balas
+    /*int contt = 0;
+    int dsw = 0;*/
+
+    while(!doexit){
+      ALLEGRO_EVENT ev;
+      al_wait_for_event(event_queue, &ev); //Espera a que se precione una tecla
+      if(ev.type == ALLEGRO_EVENT_TIMER) {
+        render = true;
+        //Con este fondoY y el if se crea el movimiento del fondo
+        //fondoY += 10;
+        //if (fondoY >= 3840){
+        //    fondoY = 0;
+        //}
+
+        //Con estos if se asigna lo que va a suceder cuando la respectiva tecla es precionada
+
+         if(key[KEY_UP] /*&& nave_y >= 4.0*/) {
+            //nave_y -= 4.0;
+         }
+
+         if(key[KEY_DOWN] /*&& nave_y <= Alto - NaveSize - 4.0*/) {
+            //nave_y += 4.0;
+         }
+
+         if(key[KEY_LEFT] /*&& nave_x >= 4.0*/) {
+            //nave_x -= 4.0;
+         }
+
+         if(key[KEY_RIGHT] /*&& nave_x <= Ancho - NaveSize - 4.0*/) {
+            //nave_x += 4.0;
+         }
+
+        //Aqui se crea la rutina de disparos
+
+         /*if(key[KEY_SPACE] && dsw == 0){
+            if(nav.numdisparos < maxdisparos){
+                nav.numdisparos++;
+                disparos[nav.numdisparos].x = nave_x;
+                disparos[nav.numdisparos].y = nave_y;
+                disparos[nav.numdisparos].dx = 0;
+                disparos[nav.numdisparos].dy = -7;
+                dsw = 1;
+            }
+         }*/
+        //Aqui es donde se usan las variables para moderar el espacio entre cada disparo, es un tipo de banderilla
+         /*if(contt++ >13){
+            dsw = 0; contt = 0;
+         }*/
+
+         /*if(nav.numdisparos > 0){
+            for(int cont = 1 ; cont <= nav.numdisparos; cont++){
+                disparos[cont].x += disparos[cont].dx;
+                disparos[cont].y += disparos[cont].dy;
+                al_draw_bitmap(bala,disparos[cont].x + 17.4,disparos[cont].y,0);
+                bool crash = colision(disparos[cont].x + 17.4, disparos[cont].y, 15, 44, ejex, ejey, 50, 50);
+                bool crash1 = colision(disparos[cont].x + 17.4, disparos[cont].y, 15, 44, ejex1, ejey1, 50, 50);
+                bool crash2 = colision(disparos[cont].x + 17.4, disparos[cont].y, 15, 44, ejex2, ejey2, 50, 50);
+                if(crash){
+                    int ejexTemp = ejex;
+                    int ejeyTemp = ejey;
+                    disparos[cont].x = -1;
+                    disparos[cont].y = -1;
+                    explosionColision(ejexTemp, ejeyTemp);
+                    ejex = 2000;
+                    ejey = 800;
+                }
+
+                if(crash1){
+                    int ejexTemp = ejex1;
+                    int ejeyTemp = ejey1;
+                    disparos[cont].x = -1;
+                    disparos[cont].y = -1;
+                    explosionColision(ejexTemp, ejeyTemp);
+                    ejex1 = 2000;
+                    ejey1 = 800;
+                }
+
+                if(crash2){
+                    int ejexTemp = ejex2;
+                    int ejeyTemp = ejey2;
+                    disparos[cont].x = -1;
+                    disparos[cont].y = -1;
+                    explosionColision(ejexTemp, ejeyTemp);
+                    ejex2 = 2000;
+                    ejey2 = 800;
+                }
+                //En este if se verifica si la bala ya esta fuera del display y si es asi entonces toma los valores que llevaba y los copia a la proxima bala
+                if(disparos[cont].y > Alto || disparos[cont].y < 0 || disparos[cont].x > Ancho || disparos[cont].x < 0){
+                        disparos[cont] = disparos[nav.numdisparos];
+                        nav.numdisparos--;
+                        if(nav.numdisparos < 0){
+                            nav.numdisparos = 0;
+                        }
+                }
+            }
+         }*/
+
+         redraw = true;
+      }
+      else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+         break;
+      }
+      //Aqui se registra si la tecla es precionada
+      else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+         switch(ev.keyboard.keycode) {
+            case ALLEGRO_KEY_UP:
+               key[KEY_UP] = true;
+               break;
+
+            case ALLEGRO_KEY_DOWN:
+               key[KEY_DOWN] = true;
+               break;
+
+            case ALLEGRO_KEY_LEFT:
+               key[KEY_LEFT] = true;
+               break;
+
+            case ALLEGRO_KEY_RIGHT:
+               key[KEY_RIGHT] = true;
+               break;
+
+            case ALLEGRO_KEY_SPACE:
+                key[KEY_SPACE]=true;
+                break;
+         }
+      }
+      //Aqui se registra si se deja de precionar la tecla
+      else if(ev.type == ALLEGRO_EVENT_KEY_UP) {
+         switch(ev.keyboard.keycode) {
+            case ALLEGRO_KEY_UP:
+               key[KEY_UP] = false;
+               break;
+
+            case ALLEGRO_KEY_DOWN:
+               key[KEY_DOWN] = false;
+               break;
+
+            case ALLEGRO_KEY_LEFT:
+               key[KEY_LEFT] = false;
+               break;
+
+            case ALLEGRO_KEY_RIGHT:
+               key[KEY_RIGHT] = false;
+               break;
+
+            case ALLEGRO_KEY_ESCAPE:
+               doexit = true;
+               break;
+
+            case ALLEGRO_KEY_SPACE:
+                key[KEY_SPACE] = false;
+                break;
+         }
+      }
+    //Aqui se actualiza todo el juego, printiando todo en su nuevo lugar
+      if(redraw && al_is_event_queue_empty(event_queue)) {
+         redraw = false;
+            render = false;
+            al_draw_bitmap(image,0,0,0);
+            //al_draw_bitmap(naveJugador, nave_x, nave_y, 0);
+            //al_draw_bitmap(naveEnemiga, ejex, ejey, 0);
+            //al_draw_bitmap(naveEnemiga1, ejex1, ejey1, 0);
+            //al_draw_bitmap(naveEnemiga2, ejex2, ejey2, 0);
+            al_flip_display();
+            al_clear_to_color(al_map_rgb(0,0,0));
+      }
+   }
+   al_rest(2);
+   al_destroy_display(display);
+   al_destroy_bitmap(image);
+
+   return 0;
+}
