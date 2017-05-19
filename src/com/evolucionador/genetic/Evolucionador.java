@@ -20,7 +20,7 @@ import com.evolucionador.enemies.*;
 import com.evolucionador.entities.*;
 import com.evolucionador.dataStrucures.*;
 
-
+// direccion por medio de la cual se accede a las funcionalidades del programa
 @Path("/evolucionador/generacion/")
 public class Evolucionador {
 	static sock _Socket = new sock();
@@ -37,10 +37,7 @@ public class Evolucionador {
 	private static String msg1;
 	private static String msg2;
 
-	// escribe las caracteristicas necesarias de los individuos en el xml
-	//
-	// en esta parte es donde tenemos que cambiar las caracteristicas que se van a escribir
-	// en el archivo xml
+	// escribe las caracteristicas necesarias de los individuos en un archivo xml
 	public void escribir(Document doc, Element rootElement, Poblacion Population){
 		Node<Entity> tmpO = Population.getIndividuals().getHead();
 		for(int i = 0; i < Population.getCantidadDeIndividuos(); i++){
@@ -100,19 +97,19 @@ public class Evolucionador {
         }
 	}
 	
-	// Muestra la cantidad de individuos
+	// Muestra la cantidad de individuos de la poblacion
 	public void showIndividuos(){		
 		System.out.println("Cantidad de gladiadores 1...   " + _Gladiadores1.getCantidadDeIndividuos());
 		System.out.println("Cantidad de gladiadores 2...   " + _Gladiadores2.getCantidadDeIndividuos());
 	}
 	
-	// Realiza la generacion inicial de enemigos
+	// Realiza la generacion inicial de los gladiadores tanto la poblacion 1, como la poblacion 2
 	public void inicio(){		
 		_Gladiadores1 = new Gladiator();
 		_Gladiadores2 = new Gladiator();
 	}
 	
-	// Realiza cruces para generar nuevos individuos 
+	// Realiza cruces para generar nuevos individuos
 	public void generation(){		
 		_Gladiadores1.DoGeneration();
 		cantidadMuta1 = _Gladiadores1._Mutaciones;
@@ -122,17 +119,18 @@ public class Evolucionador {
 		cantidadInver2 = _Gladiadores2._Inversiones;
 	}
 	
-	// Metodo inicial del evolucionador, se encarga de revisar si es la primer generacion
+	// Metodo inicial del evolucionador, 
+	// se encarga tanto de realizar la primer generacion y como las siguientes generaciones
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String returnTitle() {
-		if(contador == 0){
+		if(contador == 0){ // realiza la generacion inicial
 			inicio();			
 		}
-		else{
+		else{			   // realiza las nuevas generaciones
 			generation();
 		}
-		
+		// se establece el fitness promedio de la poblacion 1
 		Node<Entity> individuo1;
 		individuo1 = _Gladiadores1.getIndividuals().getHead();
 		for(int i = 0; i < _Gladiadores1.getCantidadDeIndividuos(); i++){
@@ -140,6 +138,8 @@ public class Evolucionador {
 			individuo1.getNextNode();
 		}
 		_fitnessProm1 = _fitnessProm1 / _Gladiadores1.getCantidadDeIndividuos();
+
+		// se establece el fitness promedio de la poblacion 1
 		Node<Entity> individuo2;
 		individuo2 = _Gladiadores2.getIndividuals().getHead();
 		for(int i = 0; i < _Gladiadores2.getCantidadDeIndividuos(); i++){
@@ -150,7 +150,8 @@ public class Evolucionador {
 		
 		showIndividuos();             
         _ID = 1;   
-        //String msg;        
+        
+        // se establecen los mensajes con la informacion que sera enviada al programa del juego
         msg1 = String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getHandDam())+"/"+String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getFootDam())+"/"+
         		String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getBodyDam())+"/"+String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getHandDef())+"/"+
         		String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getFootDef())+"/"+String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getBodyDef())+"/"+
@@ -161,17 +162,21 @@ public class Evolucionador {
         		String.valueOf(_Gladiadores2.selectTheFittest().getGenome().getFootDef())+"/"+String.valueOf(_Gladiadores2.selectTheFittest().getGenome().getBodyDef())+"/"+
         		String.valueOf(_Gladiadores2.selectTheFittest().getGenome().getTotalDef())+"/"+_Gladiadores2.calculateFitnessTo(_Gladiadores2.selectTheFittest())+"/"+
         		String.valueOf(_fitnessProm2)+"/"+String.valueOf(cantidadMuta2)+"/";
-        //_Socket.con(msg);
+        
+        
         try {        	
     		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
     		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-     
+    		
+    		///////////////////////////////////////////////////////////////////////////////////////////
+    		// logica para la escritura de datos de la poblacion 1 en el archivo xml correspondiente //
+    		///////////////////////////////////////////////////////////////////////////////////////////
     		// elemento raiz
     		Document doc = docBuilder.newDocument();
     		Element rootElement = doc.createElement("Gladiadores");
     		doc.appendChild(rootElement);
     		
-    		
+    		// cantidad de individuos
     		Element numero = doc.createElement("Cantidad");
     		rootElement.appendChild(numero);
 
@@ -179,12 +184,14 @@ public class Evolucionador {
     		valor.appendChild(doc.createTextNode(String.valueOf(_Gladiadores1.getCantidadDeIndividuos())));
     		numero.appendChild(valor);
     		
+    		// cantidad de mutaciones realizadas en la generacion
     		Element mutaciones = doc.createElement("Mutaciones");
     		rootElement.appendChild(mutaciones);
     		Element valorMuta = doc.createElement("Valor");
     		valorMuta.appendChild(doc.createTextNode(String.valueOf(cantidadMuta1)));
     		mutaciones.appendChild(valorMuta); 
     		
+    		// cantidad de inversiones realizadas en la generacion
     		Element inversiones = doc.createElement("Inversiones");
     		rootElement.appendChild(inversiones);
     		Element valorInver = doc.createElement("Valor");
@@ -205,26 +212,32 @@ public class Evolucionador {
      
     		System.out.println("File saved!");
     		
+
+			///////////////////////////////////////////////////////////////////////////////////////////
+			// logica para la escritura de datos de la poblacion 2 en el archivo xml correspondiente //
+			///////////////////////////////////////////////////////////////////////////////////////////
     		
     		// elemento raiz
     		Document doc2 = docBuilder.newDocument();
     		Element rootElement2 = doc2.createElement("Gladiadores");
     		doc2.appendChild(rootElement2);
     		
-    		
+    		// cantidad de individuos en la poblacion
     		Element numero2 = doc2.createElement("Cantidad");
     		rootElement2.appendChild(numero2);
 
     		Element valor2 = doc2.createElement("Valor");
     		valor2.appendChild(doc2.createTextNode(String.valueOf(_Gladiadores2.getCantidadDeIndividuos())));
     		numero2.appendChild(valor2);
-    		
+    		    		
+    		// cantidad de mutaciones realizadas en la generacion
     		Element mutaciones2 = doc2.createElement("Mutaciones");
     		rootElement2.appendChild(mutaciones2);
     		Element valorMuta2 = doc2.createElement("Valor");
     		valorMuta2.appendChild(doc2.createTextNode(String.valueOf(cantidadMuta2)));
     		mutaciones2.appendChild(valorMuta2); 
     		
+    		// cantidad de inversiones realizadas en la generacion
     		Element inversiones2 = doc2.createElement("Inversiones");
     		rootElement2.appendChild(inversiones2);
     		Element valorInver2 = doc2.createElement("Valor");
@@ -255,7 +268,7 @@ public class Evolucionador {
         
 		contador++;
         
-		return (msg1+msg2);
+		return (msg1+msg2); // se envia el mensaje con la informacion de las dos poblaciones
 	}	
 	
 }

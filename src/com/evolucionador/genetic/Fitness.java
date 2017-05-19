@@ -17,7 +17,7 @@ public class Fitness {
 		_IniTotalDef = 0;
 	}
 	
-	// suma todos los datos
+	// suma todos los datos que van a ser utilizados para el calculo del fitness
 	public float getSumOfAll(){
 		return _IniHandDam + _IniFootDam + _IniBodyDam + _IniTotalDef;
 	}
@@ -30,7 +30,7 @@ public class Fitness {
 		_IniTotalDef = 0;
 	}
 	
-	// establece los valores bases
+	// establece los valores bases de acuerdo a los datos de los individuos de la poblacion
 	public void setBase(DoublyLinkedListImpl<Entity> pListEntities){
 		this.restarData();
 		Node<Entity> tmp = pListEntities.getHead();
@@ -46,7 +46,7 @@ public class Fitness {
 		return;
 	}
 	
-	// calcular el fitness de cada individuo
+	// calcular el fitness de un individuo en especifico, utilizando los valores establecidos
 	public float caculateFitness(Entity pEntity){
 		Genome pGen = pEntity.getGenome();	
 				
@@ -54,8 +54,5 @@ public class Fitness {
 				(pGen.getTotalDef()/_IniTotalDef);				
 		
 		return Thefitness;
-
-	}
-		
-	
+	}		
 }

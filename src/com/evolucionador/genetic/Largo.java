@@ -6,7 +6,7 @@ public class Largo {
 	// constructor
 	public Largo(){}
 	
-	// devuelve el tamano
+	// devuelve el tamaño
 	public int tamano(int num){
 		int n = 0;
 		for(int i = 0; i <= 16; i++){

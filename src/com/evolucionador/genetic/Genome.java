@@ -34,7 +34,7 @@ public class Genome extends DoublyLinkedListImpl<Integer>{
 		
 	}
 	
-	// regresa un cromosoma especifico
+	// regresa el cromosoma especificado por el parametro de entrada
 	public int getCromosome(int pCromID){
 		Node<Integer> tmp = getHead();
 		for(int i = 0; i < pCromID; i++){
@@ -43,7 +43,7 @@ public class Genome extends DoublyLinkedListImpl<Integer>{
 		return tmp.getData();
 	}
 	
-	// establece un cromosoma especifico
+	// establece un cromosoma especifico con el valor dado, en la posicion del parametro de entrada
 	public void setCromosome(int pCromID, int pData){
 		Node<Integer> tmp = getHead();
 		for(int i = 0; i != pCromID; i++){
@@ -52,39 +52,48 @@ public class Genome extends DoublyLinkedListImpl<Integer>{
 		tmp.setData(pData);		
 	}
 	
+	// Establece el nombre del individuo de acuerdo al dado de entrada
 	public void setName(String name){
 		_Name = name;
 	}
 	
+	// establece la resistencia total de acuerdo a las otras 3 resistencias
 	public void setTotalDef(){
 		int tmp = (this.getHandDef() + this.getFootDef() + this.getBodyDef());
 		setCromosome(6, tmp);
 	}
 	
+	// retorna el daño de ataque de mano
 	public int getHandDam(){
 		return getCromosome(0);
 	}
 	
+	// retorna el daño de ataque de pie
 	public int getFootDam(){
 		return getCromosome(1);
 	}
 	
+	// retorna el daño de ataque de cuerpo
 	public int getBodyDam(){
 		return getCromosome(2);
 	}
 	
+	// retorna la defensa de mano
 	public int getHandDef(){
 		return getCromosome(3);
 	}
 	
+	// retorna la defensa de pie
 	public int getFootDef(){
 		return getCromosome(4);
 	}
 	
+	// retorna la defensa de cuerpo
 	public int getBodyDef(){
 		return getCromosome(5);
 	}
 	
+	// retorna la defensa de total
 	public int getTotalDef(){
 		return getCromosome(6);
 	}

@@ -7,7 +7,7 @@ import com.evolucionador.genetic.*;
 
 public class Gladiator extends Poblacion {
 	private Random _Random;
-	
+	// Metodo constructor de los gladiadores, en la cual se generara las caracteristicas de la poblacion inicial
 	public Gladiator(){
 		_Random = new Random();  
 		Genome newGenome;

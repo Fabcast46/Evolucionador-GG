@@ -29,21 +29,24 @@ public class Entity {
 		_TotalDef = 0;
 	}
 	
-	// constructor distinto
+	// constructor para establecer caracteristicas especiales
 	public Entity(Entity pFather, Entity pMother, Genome pGenome){
 		this._Genome = pGenome;		
 		this._Father = pFather;
 		this._Mother = pMother;
 	}
 	
+	// retorna el genoma del individuo, el cual posee los cromosomas del individuo
 	public Genome getGenome(){
 		return _Genome;
 	}
 	
+	// asigna un ID al individuo
 	public void setID(int pID){
 		_ID = pID;
 	}
 	
+	// retorna el ID del individuo
 	public int getID(){
 		return _ID;
 	}

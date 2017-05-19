@@ -7,9 +7,7 @@ import java.util.Random;
 import java.io.*;
 
 public class Poblacion {
-	
-	//private static final String FILENAME = "E:\\test\\filename.txt";
-	
+		
 	protected Fitness _Fitness;
 	protected DoublyLinkedListImpl<Entity> _Individuos;
 	protected DoublyLinkedListImpl<Entity> _Padres;
@@ -33,6 +31,7 @@ public class Poblacion {
 		this._Padres = new DoublyLinkedListImpl<Entity>();
 	}
 	
+	// Metodo para la asignacion de un nombre para los gladiadores
 	public String getRandomName(){
 		// The name of the file to open.
         String fileName = "/home/fabricio/workspace/evo/src/names";
@@ -72,6 +71,7 @@ public class Poblacion {
 		return line;
 	}
 	
+	// Metodo para seleccionar el mejor individuo de la poblacion
 	public Entity selectTheFittest(){
 		int escogible = 0;
 		int cantidadElementos = this._Individuos.size();
@@ -90,12 +90,7 @@ public class Poblacion {
 						if(tmpNode.getData() != tmpFather.getData()){
 							if(_Padres.size() == 1){
 								escogible = 0;
-							}
-							//tmpFittest = tmpNode;
-							//tmpFitness = _Fitness.caculateFitness(tmpNode.getData());
-							//tmpNode = tmpNode.getNextNode();
-							//break;
-							
+							}							
 						}
 						else{
 							escogible = 1;
@@ -121,16 +116,14 @@ public class Poblacion {
 		}
 		if(this._CantPadres == 0){
 			_Padres.addFirst(tmpFittest.getData());
-			//this._CantPadres++;
 		}
 		else{
 			_Padres.addLast(tmpFittest.getData());
-			//this._CantPadres++;
 		}
 		return tmpFittest.getData();
 	}
 	
-	// selecciona de manera aleatoria un fitness
+	// selecciona de manera aleatoria un individuo por fitness
 	public Entity randomSelectTheFittest(){
 		//obtener un numero aleatorio, desde 0 hasta la suma de todos los fitnes multiplicado por la cantidad de genes
 		int randomObtained = _Random.nextInt((int) (_Fitness.getSumOfAll()*4));
@@ -166,9 +159,6 @@ public class Poblacion {
 	
 	// metodo para llavar a cabo una generacion
 	public void DoGeneration(){
-		//_Padres.addFirst(null);
-		//this._Mutaciones = 0;
-		//this._Inversiones = 0;
 		_Padres.clear();	
 		int newBorns = 10;
 		
@@ -191,6 +181,7 @@ public class Poblacion {
 			this._CantPadres++;
 			Entity NewSon = _Reproduction.reproducir(NewFather, NewMother);
 			NewSon.getGenome()._Name = getRandomName();
+			NewSon.getGenome().setTotalDef();
 			_Individuos.addLast(NewSon); 
 		}		
 		CurrentGeneration++;
@@ -205,10 +196,12 @@ public class Poblacion {
 		return _Individuos;
 	}	
 	
+	// regresa la generacion actual
 	public short getCurrentGeneration(){
 		return CurrentGeneration;
 	}
 	
+	// regresa la cantidad de individuos de la poblacion
 	public int getCantidadDeIndividuos(){
 		return _Individuos.size();
 	}	
