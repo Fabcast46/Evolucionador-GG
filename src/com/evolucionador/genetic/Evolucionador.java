@@ -32,6 +32,10 @@ public class Evolucionador {
 	private static int cantidadInver1 = 0;
 	private static int cantidadMuta2 = 0;
 	private static int cantidadInver2 = 0;
+	private static double _fitnessProm1 = 0;
+	private static double _fitnessProm2 = 0;
+	private static String msg1;
+	private static String msg2;
 
 	// escribe las caracteristicas necesarias de los individuos en el xml
 	//
@@ -123,19 +127,41 @@ public class Evolucionador {
 	@Produces(MediaType.TEXT_HTML)
 	public String returnTitle() {
 		if(contador == 0){
-			inicio();
+			inicio();			
 		}
 		else{
 			generation();
 		}
+		
+		Node<Entity> individuo1;
+		individuo1 = _Gladiadores1.getIndividuals().getHead();
+		for(int i = 0; i < _Gladiadores1.getCantidadDeIndividuos(); i++){
+			_fitnessProm1 += _Gladiadores1.calculateFitnessTo(individuo1.getData());
+			individuo1.getNextNode();
+		}
+		_fitnessProm1 = _fitnessProm1 / _Gladiadores1.getCantidadDeIndividuos();
+		Node<Entity> individuo2;
+		individuo2 = _Gladiadores2.getIndividuals().getHead();
+		for(int i = 0; i < _Gladiadores2.getCantidadDeIndividuos(); i++){
+			_fitnessProm2 += _Gladiadores2.calculateFitnessTo(individuo2.getData());
+			individuo2.getNextNode();
+		}
+		_fitnessProm2 = _fitnessProm2 / _Gladiadores2.getCantidadDeIndividuos();
+		
 		showIndividuos();             
         _ID = 1;   
-        String msg;
-        msg = String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getHandDam())+"/"+String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getFootDam())+"/"+
+        //String msg;        
+        msg1 = String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getHandDam())+"/"+String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getFootDam())+"/"+
         		String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getBodyDam())+"/"+String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getHandDef())+"/"+
         		String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getFootDef())+"/"+String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getBodyDef())+"/"+
-        		String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getTotalDef())+"/";
-        _Socket.con(msg);
+        		String.valueOf(_Gladiadores1.selectTheFittest().getGenome().getTotalDef())+"/"+_Gladiadores1.calculateFitnessTo(_Gladiadores1.selectTheFittest())+"/"+
+        		String.valueOf(_fitnessProm1)+"/"+String.valueOf(cantidadMuta1)+"/";
+        msg2 = String.valueOf(_Gladiadores2.selectTheFittest().getGenome().getHandDam())+"/"+String.valueOf(_Gladiadores2.selectTheFittest().getGenome().getFootDam())+"/"+
+        		String.valueOf(_Gladiadores2.selectTheFittest().getGenome().getBodyDam())+"/"+String.valueOf(_Gladiadores2.selectTheFittest().getGenome().getHandDef())+"/"+
+        		String.valueOf(_Gladiadores2.selectTheFittest().getGenome().getFootDef())+"/"+String.valueOf(_Gladiadores2.selectTheFittest().getGenome().getBodyDef())+"/"+
+        		String.valueOf(_Gladiadores2.selectTheFittest().getGenome().getTotalDef())+"/"+_Gladiadores2.calculateFitnessTo(_Gladiadores2.selectTheFittest())+"/"+
+        		String.valueOf(_fitnessProm2)+"/"+String.valueOf(cantidadMuta2)+"/";
+        //_Socket.con(msg);
         try {        	
     		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
     		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -229,7 +255,7 @@ public class Evolucionador {
         
 		contador++;
         
-		return "<p>Evolucionador Genetico</p>";
+		return (msg1+msg2);
 	}	
 	
 }

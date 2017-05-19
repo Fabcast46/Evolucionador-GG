@@ -10,6 +10,8 @@ public class Reproduction{
 	
 	// analiza y realiza la mutacion del material genetico 
 	private Genome mutate(Genome pGenoma){
+		mutaciones = 0;
+		inversiones= 0;
 		for(int i=0; i<7; i++){
 			int valordemut = _Random.nextInt(10000);//porcentaje de mutacion y inversion
 			//esta parte se encarga de hacer la mutacion
